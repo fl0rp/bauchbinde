@@ -18,10 +18,10 @@
                     speaker = decodeURIComponent(value);
                 }
                 if (key === 'intro') {
-                    isIntro = !!value
+                    isIntro = !!parseInt(value, 10)
                 }
                 if (key === 'hold') {
-                    holdDuration = parseInt(value);
+                    holdDuration = parseInt(value, 10);
                 }
             })
         }
