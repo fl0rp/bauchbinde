@@ -78,7 +78,7 @@ body {
     background-color: #02fae0;
     width: 100%;
     height: 100%;
-    box-shadow: 0 0 0 1px #02fae0;
+    box-shadow: 1px 0 0 0 #02fae0;
 }
 
 .tile.yellow::before {
