@@ -3,6 +3,7 @@
     let headline = 'Headline Headline,';
     let speaker = 'Speaker Speaker';
     let isIntro = false;
+    let holdDuration = 4000;
 
     function init() {
         textEl = document.querySelector('.text');
@@ -18,6 +19,9 @@
                 }
                 if (key === 'intro') {
                     isIntro = !!value
+                }
+                if (key === 'hold') {
+                    holdDuration = parseInt(value);
                 }
             })
         }
@@ -82,7 +86,7 @@
                 fadeInText(),
             ]);
         }
-        await new Promise(r => setTimeout(r, 2000));
+        await new Promise(r => setTimeout(r, holdDuration));
         await Promise.all([
             fadeOut(),
             fadeOutText(),
