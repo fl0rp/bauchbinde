@@ -3,13 +3,27 @@
     src: url('Orbitron-VariableFont_wght.ttf');
 }
 
+:root {
+    --large-tile-color: #02fae0;
+    --medium-tile-color: #fff900;
+    --small-tile-color: #0bcb60;
+    --text-color: #252826;
+}
+
+:root.theme-main {
+    --large-tile-color: #6800e7;
+    --medium-tile-color: #fff;
+    --small-tile-color: #05b9ec;
+    --text-color: #fff;
+}
+
 body {
     margin: 0;
     background-color: #000;
     font-family: Orbitron, sans-serif;
     font-size: 2vw;
     line-height: 2vw;
-    color: #252826;
+    color: var(--text-color);
     /*color: #0e1c23;*/
     text-transform: uppercase;
     letter-spacing: 0.1vw;
@@ -74,21 +88,21 @@ body {
     transform: translate(-50%, -50%);
 }
 
-.tile.blue::before {
-    background-color: #02fae0;
+.tile.large::before {
+    background-color: var(--large-tile-color);
     width: 100%;
     height: 100%;
-    box-shadow: 1px 0 0 0 #02fae0;
+    box-shadow: 1px 0 0 0 var(--large-tile-color);
 }
 
-.tile.yellow::before {
-    background-color: #fff900;
+.tile.medium::before {
+    background-color: var(--medium-tile-color);
     width: 50%;
     padding-top: 50%;
 }
 
-.tile.green::before {
-    background-color: #0bcb60;
+.tile.small::before {
+    background-color: var(--small-tile-color);
     width: 35%;
     padding-top: 35%;
 }

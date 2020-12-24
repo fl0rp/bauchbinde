@@ -23,10 +23,13 @@
                 if (key === 'hold') {
                     holdDuration = parseInt(value, 10);
                 }
+                if (key === 'theme') {
+                    const root = document.querySelector('html');
+                    root.className = '';
+                    root.classList.add(`theme-${decodeURIComponent(value)}`)
+                }
             })
         }
-
-        console.debug({speaker, headline});
 
         const headlineEl = document.createElement('span');
         headlineEl.classList.add('headline');
@@ -55,7 +58,7 @@
 
         for (let i = 0; i < 16; i++) {
             const tile = document.createElement('div');
-            tile.classList.add('tile', 'blue');
+            tile.classList.add('tile', 'large');
             mainTilesEl.appendChild(tile);
         }
 
@@ -66,9 +69,9 @@
             const tile = document.createElement('div');
             tile.classList.add('tile');
             if (i === 0 || Math.random() > 0.5) {
-                tile.classList.add('yellow');
+                tile.classList.add('medium');
             } else {
-                tile.classList.add('green');
+                tile.classList.add('small');
             }
             secondaryTilesEl.appendChild(tile);
         }
