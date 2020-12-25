@@ -1,7 +1,5 @@
 (() => {
-    const mainTrackRooms = ['rc1', 'rc2', 'chaosstudio-hamburg', 'restrealitaet'];
-    const mainTrackUrl = 'https://fahrplan.events.ccc.de/rc3/2020/Fahrplan/schedule.json';
-    const assemblyUrl = 'https://pretalx.rc3.studio/rc3-channels-2020/schedule/export/schedule.json';
+    const scheduleUrl = 'https://schedule2.broken.equipment/everything.schedule.json';
 
     let textEl;
     let headline = '¯\\_(ツ)_/¯';
@@ -16,14 +14,8 @@
         if (time) {
             now = Date.parse(time)
         }
-        let url;
-        if (mainTrackRooms.includes(roomName)) {
-            url = mainTrackUrl;
-        } else {
-            url = assemblyUrl;
-        }
 
-        const response = await fetch(url);
+        const response = await fetch(scheduleUrl);
         const data = await response.json();
         const days = data.schedule.conference.days;
         const today = days.find(day => {
