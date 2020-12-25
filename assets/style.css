@@ -8,6 +8,9 @@
     --medium-tile-color: #fff900;
     --small-tile-color: #0bcb60;
     --text-color: #252826;
+    --bottom: 9vw;
+    --left: 12.5vw;
+    --width: 67.5vw;
 }
 
 :root.theme-main {
@@ -39,9 +42,9 @@ body {
 
 .container {
     position: fixed;
-    bottom: 9vw;
-    left: 12.5vw;
-    right: 20vw;
+    bottom: var(--bottom);
+    left: var(--left);
+    width: var(--width);
 }
 
 .background {

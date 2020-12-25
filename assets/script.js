@@ -41,6 +41,7 @@
     }
 
     async function init() {
+        const root = document.querySelector('html');
         textEl = document.querySelector('.text');
         textEl.innerHTML = '';
 
@@ -63,7 +64,6 @@
                     holdDuration = parseInt(value, 10);
                 }
                 if (key === 'theme') {
-                    const root = document.querySelector('html');
                     root.className = '';
                     root.classList.add(`theme-${value}`)
                 }
@@ -75,6 +75,15 @@
                 }
                 if (key === 'startdelay') {
                     startDelay = parseInt(value, 10);
+                }
+                if (key === 'left') {
+                    root.style.setProperty('--left', value);
+                }
+                if (key === 'bottom') {
+                    root.style.setProperty('--bottom', value);
+                }
+                if (key === 'width') {
+                    root.style.setProperty('--width', value);
                 }
             }
         }
