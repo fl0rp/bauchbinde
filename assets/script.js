@@ -50,7 +50,7 @@
                 const value = decodeURIComponent(pair.join('='));
 
                 if (key === 'headline') {
-                    headline = value + ',';
+                    headline = value;
                 }
                 if (key === 'speaker') {
                     speaker = value;
@@ -91,6 +91,10 @@
                     speaker = talk.persons.map(person => person.public_name).join(' / ');
                 }
             }
+        }
+       
+        if (speaker) {
+            headline += ',';
         }
 
         const headlineEl = document.createElement('span');
@@ -249,4 +253,3 @@
         await animate();
     });
 })();
-
