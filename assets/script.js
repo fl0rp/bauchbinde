@@ -1,21 +1,67 @@
 (() => {
+    const mainTrackRooms = ['rc1', 'rc2', 'chaosstudio-hamburg', 'restrealitaet'];
+    const mainTrackUrl = 'https://fahrplan.events.ccc.de/rc3/2020/Fahrplan/schedule.json';
+    const assemblyUrl = 'https://pretalx.rc3.studio/rc3-channels-2020/schedule/export/schedule.json';
+
     let textEl;
-    let headline = 'Headline Headline,';
-    let speaker = 'Speaker Speaker';
+    let headline = '¯\\_(ツ)_/¯';
+    let speaker = '';
     let isIntro = false;
     let holdDuration = 4000;
+    let room = null;
+    let time = null;
 
-    function init() {
+    async function getCurrentTalkByRoomName(roomName) {
+        let now = Date.now();
+        if (time) {
+            now = Date.parse(time)
+        }
+        let url;
+        if (mainTrackRooms.includes(roomName)) {
+            url = mainTrackUrl;
+        } else {
+            url = assemblyUrl;
+        }
+
+        const response = await fetch(url);
+        const data = await response.json();
+        const days = data.schedule.conference.days;
+        const today = days.find(day => {
+            const start = Date.parse(day.day_start);
+            const end = Date.parse(day.day_end);
+            return now >= start && now <= end;
+        });
+        if (!today) return false;
+
+        const room = today.rooms[roomName];
+        if (!room) return false;
+
+        const talk = room.find(talk => {
+            const start = Date.parse(talk.date);
+            const [hours, minutes] = talk.duration.split(':');
+            const duration = (hours * 60 + minutes) * 60 * 1000;
+            const end = start + duration;
+            return now >= start && now <= end;
+        })
+        if (!talk) return false;
+        return talk;
+    }
+
+    async function init() {
         textEl = document.querySelector('.text');
         textEl.innerHTML = '';
 
         if (window.location.search) {
-            window.location.search.slice(1).split('&').map(x => x.split('=')).forEach(([key, value]) => {
+            const pairs = window.location.search.slice(1).split('&').map(x => x.split('='));
+            for (let pair of pairs) {
+                const key = pair.shift();
+                const value = decodeURIComponent(pair.join('='));
+
                 if (key === 'headline') {
-                    headline = decodeURIComponent(value) + ',';
+                    headline = value + ',';
                 }
                 if (key === 'speaker') {
-                    speaker = decodeURIComponent(value);
+                    speaker = value;
                 }
                 if (key === 'intro') {
                     isIntro = !!parseInt(value, 10)
@@ -26,9 +72,33 @@
                 if (key === 'theme') {
                     const root = document.querySelector('html');
                     root.className = '';
-                    root.classList.add(`theme-${decodeURIComponent(value)}`)
+                    root.classList.add(`theme-${value}`)
                 }
-            })
+                if (key === 'theme') {
+                    const root = document.querySelector('html');
+                    root.className = '';
+                    root.classList.add(`theme-${value}`)
+                }
+                if (key === 'room') {
+                    room = value;
+                }
+                if (key === 'time') {
+                    time = value;
+                }
+            }
+        }
+
+        if (room) {
+            const talk = await getCurrentTalkByRoomName(room);
+            if (!talk) {
+                headline = '¯\\_(ツ)_/¯';
+                speaker = '';
+            } else {
+                headline = talk.title;
+                if (talk.persons) {
+                    speaker = talk.persons.map(person => person.public_name).join(' / ');
+                }
+            }
         }
 
         const headlineEl = document.createElement('span');
@@ -103,7 +173,7 @@
             tile.style.animationName = `slide-in-${Math.floor(Math.random() * 10)}`;
             tile.style.animationDelay = `${Math.random() * 0.4}s`;
             tile.style.animationDuration = `${0.8 + Math.random() * 0.4}s`;
-            tile.style.animationIterationCount = 1;
+            tile.style.animationIterationCount = '1';
             tile.style.animationTimingFunction = 'ease-in';
         }
         await new Promise(r => setTimeout(r, 600));
@@ -120,7 +190,7 @@
             tile.style.animationName = `fade-in`;
             tile.style.animationDelay = `${Math.random() * 0.4}s`;
             tile.style.animationDuration = `${0.8 + Math.random() * 0.4}s`;
-            tile.style.animationIterationCount = 1;
+            tile.style.animationIterationCount = '1';
             tile.style.animationTimingFunction = 'ease-in';
         }
         await new Promise(r => setTimeout(r, 600));
@@ -137,7 +207,7 @@
             tile.style.animationName = `fade-out`;
             tile.style.animationDelay = `${Math.random() * 0.4}s`;
             tile.style.animationDuration = `${0.8 + Math.random() * 0.4}s`;
-            tile.style.animationIterationCount = 1;
+            tile.style.animationIterationCount = '1';
             tile.style.animationTimingFunction = 'ease-in';
         }
         await new Promise(r => setTimeout(r, 600));
@@ -171,7 +241,7 @@
             letter.style.animationName = `fade-out`;
             letter.style.animationDelay = `${Math.random() * 0.4}s`;
             letter.style.animationDuration = `${0.8 + Math.random() * 0.4}s`;
-            letter.style.animationIterationCount = 1;
+            letter.style.animationIterationCount = '1';
             letter.style.animationTimingFunction = 'ease-in';
         }
         await new Promise(r => setTimeout(r, 600));
@@ -182,9 +252,9 @@
     }
 
     window.addEventListener('load', async () => {
-        init();
+        await init();
         await new Promise(r => setTimeout(r, 1000));
-        animate();
+        await animate();
     });
 })();
 
