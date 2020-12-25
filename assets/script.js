@@ -8,6 +8,7 @@
     let holdDuration = 4000;
     let room = null;
     let time = null;
+    let startDelay = 1000;
 
     async function getCurrentTalkByRoomName(roomName) {
         let now = Date.now();
@@ -77,6 +78,9 @@
                 if (key === 'time') {
                     time = value;
                 }
+                if (key === 'startdelay') {
+                    startDelay = parseInt(value, 10);
+                }
             }
         }
 
@@ -92,7 +96,7 @@
                 }
             }
         }
-       
+
         if (speaker) {
             headline += ',';
         }
@@ -249,7 +253,7 @@
 
     window.addEventListener('load', async () => {
         await init();
-        await new Promise(r => setTimeout(r, 1000));
+        await new Promise(r => setTimeout(r, startDelay));
         await animate();
     });
 })();
