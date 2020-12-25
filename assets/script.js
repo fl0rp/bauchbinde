@@ -67,11 +67,6 @@
                     root.className = '';
                     root.classList.add(`theme-${value}`)
                 }
-                if (key === 'theme') {
-                    const root = document.querySelector('html');
-                    root.className = '';
-                    root.classList.add(`theme-${value}`)
-                }
                 if (key === 'room') {
                     room = value;
                 }
