@@ -6,11 +6,11 @@
     let headline = null;
     let speaker = null;
     let isIntro = false;
-    let holdDuration = 4000;
+    let holdDuration = 10;
     let room = null;
     let time = null;
-    let startDelay = 1000;
-    let gracePeriod = 5;
+    let startDelay = 1;
+    let gracePeriod = 360;
     let interval = null;
 
     async function getCurrentTalkByRoomName(roomName, offset) {
@@ -104,7 +104,7 @@
         }
 
         if (room) {
-            let offset = gracePeriod * 60 * 1000;
+            let offset = gracePeriod * 1000;
             let talk = await getCurrentTalkByRoomName(room);
             if (!talk) {
                 talk = await getCurrentTalkByRoomName(room, -offset);
@@ -195,7 +195,7 @@
                 fadeInText(),
             ]);
         }
-        await new Promise(r => setTimeout(r, holdDuration));
+        await new Promise(r => setTimeout(r, holdDuration * 1000));
         await Promise.all([
             fadeOut(),
             fadeOutText(),
@@ -289,7 +289,7 @@
 
     async function cycle() {
         if (await init()) {
-            await new Promise(r => setTimeout(r, startDelay));
+            await new Promise(r => setTimeout(r, startDelay * 1000));
             await animate();
         }
         if (interval) {
