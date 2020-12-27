@@ -91,6 +91,9 @@
                 if (key === 'bottom') {
                     root.style.setProperty('--bottom', value);
                 }
+                if (key === 'top') {
+                    root.style.setProperty('--top', value);
+                }
                 if (key === 'width') {
                     root.style.setProperty('--width', value);
                 }
