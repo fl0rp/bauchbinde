@@ -1,23 +1,31 @@
 (() => {
     const scheduleUrl = 'https://schedule2.broken.equipment/everything.schedule.json';
 
+    let data = null;
     let textEl;
-    let headline = '¯\\_(ツ)_/¯';
-    let speaker = '';
+    let headline = null;
+    let speaker = null;
     let isIntro = false;
     let holdDuration = 4000;
     let room = null;
     let time = null;
     let startDelay = 1000;
+    let gracePeriod = 5;
 
-    async function getCurrentTalkByRoomName(roomName) {
-        let now = Date.now();
+    async function getCurrentTalkByRoomName(roomName, offset) {
+        if (!offset) {
+            offset = 0;
+        }
+        let now = Date.now() + offset;
         if (time) {
-            now = Date.parse(time)
+            now = Date.parse(time) + offset;
         }
 
-        const response = await fetch(scheduleUrl);
-        const data = await response.json();
+        if (!data) {
+            const response = await fetch(scheduleUrl);
+            data = await response.json();
+        }
+
         const days = data.schedule.conference.days;
         const today = days.find(day => {
             const start = Date.parse(day.day_start);
@@ -85,14 +93,24 @@
                 if (key === 'width') {
                     root.style.setProperty('--width', value);
                 }
+                if (key === 'gracePeriod') {
+                    gracePeriod = parseInt(value, 10)
+                }
             }
         }
 
         if (room) {
-            const talk = await getCurrentTalkByRoomName(room);
+            let offset = gracePeriod * 60 * 1000;
+            let talk = await getCurrentTalkByRoomName(room);
             if (!talk) {
-                headline = '¯\\_(ツ)_/¯';
-                speaker = '';
+                talk = await getCurrentTalkByRoomName(room, offset);
+            }
+            if (!talk) {
+                talk = await getCurrentTalkByRoomName(room, -offset);
+            }
+            if (!talk) {
+                headline = null;
+                speaker = null;
             } else {
                 headline = talk.title;
                 if (talk.persons) {
@@ -101,7 +119,11 @@
             }
         }
 
-        if (speaker) {
+        if (!headline) {
+            return false;
+        }
+
+        if (speaker && headline) {
             headline += ',';
         }
 
@@ -110,18 +132,22 @@
         const speakerEl = document.createElement('span');
         speakerEl.classList.add('speaker');
 
-        Array.from(headline).forEach(letter => {
-            const letterEl = document.createElement('span');
-            letterEl.classList.add('letter');
-            letterEl.innerText = letter;
-            headlineEl.appendChild(letterEl);
-        })
-        Array.from(speaker).forEach(letter => {
-            const letterEl = document.createElement('span');
-            letterEl.classList.add('letter');
-            letterEl.innerText = letter;
-            speakerEl.appendChild(letterEl);
-        })
+        if (headline) {
+            Array.from(headline).forEach(letter => {
+                const letterEl = document.createElement('span');
+                letterEl.classList.add('letter');
+                letterEl.innerText = letter;
+                headlineEl.appendChild(letterEl);
+            })
+        }
+        if (speaker) {
+            Array.from(speaker).forEach(letter => {
+                const letterEl = document.createElement('span');
+                letterEl.classList.add('letter');
+                letterEl.innerText = letter;
+                speakerEl.appendChild(letterEl);
+            })
+        }
 
         textEl.appendChild(headlineEl);
         textEl.appendChild(document.createTextNode(' '));
@@ -149,6 +175,8 @@
             }
             secondaryTilesEl.appendChild(tile);
         }
+
+        return true;
     }
 
     async function animate() {
@@ -256,8 +284,9 @@
     }
 
     window.addEventListener('load', async () => {
-        await init();
-        await new Promise(r => setTimeout(r, startDelay));
-        await animate();
+        if (await init()) {
+            await new Promise(r => setTimeout(r, startDelay));
+            await animate();
+        }
     });
 })();
