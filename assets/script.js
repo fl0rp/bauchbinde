@@ -11,6 +11,7 @@
     let time = null;
     let startDelay = 1000;
     let gracePeriod = 5;
+    let interval = null;
 
     async function getCurrentTalkByRoomName(roomName, offset) {
         if (!offset) {
@@ -94,7 +95,10 @@
                     root.style.setProperty('--width', value);
                 }
                 if (key === 'gracePeriod') {
-                    gracePeriod = parseInt(value, 10)
+                    gracePeriod = parseInt(value, 10);
+                }
+                if (key === 'interval') {
+                    interval = parseInt(value, 10);
                 }
             }
         }
@@ -283,10 +287,17 @@
         await new Promise(r => setTimeout(r, 1000));
     }
 
-    window.addEventListener('load', async () => {
+    async function cycle() {
         if (await init()) {
             await new Promise(r => setTimeout(r, startDelay));
             await animate();
         }
+        if (interval) {
+            setTimeout(cycle, interval * 1000);
+        }
+    }
+
+    window.addEventListener('load', () => {
+        cycle();
     });
 })();
