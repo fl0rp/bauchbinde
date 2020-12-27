@@ -22,7 +22,7 @@
             now = Date.parse(time) + offset;
         }
 
-        if (!data) {
+        if (!offset || !data) {
             const response = await fetch(scheduleUrl);
             data = await response.json();
         }
