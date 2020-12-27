@@ -103,10 +103,10 @@
             let offset = gracePeriod * 60 * 1000;
             let talk = await getCurrentTalkByRoomName(room);
             if (!talk) {
-                talk = await getCurrentTalkByRoomName(room, offset);
+                talk = await getCurrentTalkByRoomName(room, -offset);
             }
             if (!talk) {
-                talk = await getCurrentTalkByRoomName(room, -offset);
+                talk = await getCurrentTalkByRoomName(room, offset);
             }
             if (!talk) {
                 headline = null;
