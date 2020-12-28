@@ -42,7 +42,7 @@
 
         const talk = room.find(talk => {
             const start = Date.parse(talk.date);
-            const [hours, minutes] = talk.duration.split(':');
+            const [hours, minutes] = talk.duration.split(':').map(s => parseInt(s.trim(), 10));
             const duration = (hours * 60 + minutes) * 60 * 1000;
             const end = start + duration;
             return now >= start && now <= end;
