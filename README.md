@@ -5,6 +5,7 @@
 * headline: set headline
 * speaker: set speaker name
 * intro: 1=full intro, omit or set to 0 for low-profile version
+* autoIntro: for use with interval, if set to 1, will play fancy intro animation once and use the fade-in for subsequent intervals
 * hold: hold time in seconds, default 10
 * startdelay: delay before showing in seconds, default 1
 * theme: "assembly" or "main", defaults to assembly

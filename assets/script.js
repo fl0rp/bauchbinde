@@ -1,6 +1,8 @@
 (() => {
     const scheduleUrl = 'https://schedule2.broken.equipment/everything.schedule.json';
 
+    let isFirstRun = true;
+    let autoIntro = false;
     let data = null;
     let textEl;
     let headline = null;
@@ -68,6 +70,9 @@
                 }
                 if (key === 'intro') {
                     isIntro = !!parseInt(value, 10)
+                }
+                if (key === 'autoIntro') {
+                    autoIntro = !!parseInt(value, 10)
                 }
                 if (key === 'hold') {
                     holdDuration = parseInt(value, 10);
@@ -187,7 +192,7 @@
     }
 
     async function animate() {
-        if (isIntro) {
+        if (autoIntro ? isFirstRun : isIntro) {
             await Promise.all([
                 slideIn(),
                 fadeInText(),
@@ -297,6 +302,7 @@
         }
         if (interval) {
             setTimeout(cycle, interval * 1000);
+            isFirstRun = false;
         }
     }
 
