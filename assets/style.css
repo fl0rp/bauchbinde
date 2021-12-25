@@ -9,6 +9,15 @@
     src: url('SpaceMono-Regular.ttf');
 }
 
+@keyframes glitch {
+    0% {
+        background-position: center 0;
+    }
+    0% {
+        background-position: center 100%;
+    }
+}
+
 :root {
     --text-color: #fff;
     --header-text-color: #252826;
@@ -19,12 +28,29 @@
     --top: auto;
 }
 
+html {
+    font-size: calc(var(--width) * 0.034);
+}
+
 body {
     margin: 0;
-    background-color: #444;
+    background-color: #000;
     font-family: SpaceMono, monospace;
-    font-size: 1.7vw;
     color: var(--text-color);
+}
+
+.container {
+    position: fixed;
+    bottom: var(--bottom);
+    left: var(--left);
+    width: var(--width);
+    top: var(--top);
+}
+
+.info {
+    border: 0.1vw solid var(--frame-color);
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.6);
 }
 
 .headline {
@@ -35,24 +61,29 @@ body {
     color: var(--header-text-color);
     text-align: center;
     line-height: 1.3;
-    padding: 0 1vw;
+    padding: 0 0.5875rem;
     font-size: 1.25em;
 }
 
 .speaker {
-    padding: 0.5vw 1vw 0.7vw;
+    padding: 0.29rem 0.59rem 0.406rem;
 }
 
-.container {
-    transition: opacity 0.3s ease 0s;
-    position: fixed;
-    bottom: var(--bottom);
-    left: var(--left);
-    width: var(--width);
-    top: var(--top);
-    border: 0.1vw solid var(--frame-color);
+.glitch-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 101%;
+}
+
+.glitch {
+    width: 100%;
+    padding-top: 14.25722%;
     opacity: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background-image: url('sprites.png');
+    background-size: 100% auto;
+    animation: 1.5s glitch infinite steps(37);
 }
 
 .visible {

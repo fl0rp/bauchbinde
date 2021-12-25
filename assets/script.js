@@ -152,9 +152,19 @@
     }
 
     async function animate() {
-        document.querySelector('.container').classList.add('visible');
+        const glitchEl = document.querySelector('.glitch');
+        const infoEl = document.querySelector('.info');
+        const glitchDuration = 1500;
+
+        glitchEl.classList.add('visible');
+        await new Promise(r => setTimeout(r, glitchDuration));
+        glitchEl.classList.remove('visible');
+        infoEl.classList.add('visible');
         await new Promise(r => setTimeout(r, holdDuration * 1000));
-        document.querySelector('.container').classList.remove('visible');
+        infoEl.classList.remove('visible');
+        glitchEl.classList.add('visible');
+        await new Promise(r => setTimeout(r, glitchDuration));
+        glitchEl.classList.remove('visible');
     }
 
     async function cycle() {
