@@ -83,7 +83,7 @@ body {
     opacity: 0;
     background-image: url('sprites.png');
     background-size: 100% auto;
-    animation: 1.5s glitch infinite steps(37);
+    animation: 5s glitch infinite steps(37);
 }
 
 .visible {
